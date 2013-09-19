@@ -1,0 +1,88 @@
+package regrasdenegocio;
+
+import java.io.PrintStream;
+import java.util.*;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+import modelos.Opcao;
+import modelos.Questao;
+
+public class QuestaoRN{	
+    private DataModel modelOpcao;
+    private Questao questao;
+    private Map opcoesCriadas;
+
+    public QuestaoRN()
+    {
+        questao = new Questao("Digite a pergunta da quest\343o", "Digite o texto de ajuda da quest\343o", 1, false);
+        questao.setOpcoes(new ArrayList());
+        questao.getOpcoes().add(new Opcao());
+        opcoesCriadas = new HashMap();
+        modelOpcao = new ListDataModel(questao.getOpcoes());
+    }
+
+    public QuestaoRN criarQuestaoModelo()
+    {
+        QuestaoRN q = new QuestaoRN();
+        q.getQuestao().setOpcoes(new ArrayList());
+        return q;
+    }
+
+    public void salvarQuestao(QuestaoRN questao)
+    {
+        questao.getQuestao().setEditavel(false);
+        if(questao.getQuestao().getTipoDeQuestao() == 2)
+        {
+            System.out.println((new StringBuilder()).append("Tipo de Quest\343o: ").append(questao.getQuestao().getTipoDeQuestao()).toString());
+            setOpcoesCriadas(new LinkedHashMap());
+            Opcao c;
+            for(Iterator i$ = this.questao.getOpcoes().iterator(); i$.hasNext(); questao.opcoesCriadas.put(c.getCampo(), c.getCampo()))
+                c = (Opcao)i$.next();
+
+        }
+    }
+
+    public void adicionarOpcao(QuestaoRN questao)
+    {
+        questao.getQuestao().getOpcoes().add(new Opcao());
+        questao.setModelOpcao(new ListDataModel(questao.getQuestao().getOpcoes()));
+    }
+
+    public void removerOpcao(QuestaoRN questao, int index)
+    {
+        questao.getQuestao().getOpcoes().remove(index);
+        questao.setModelOpcao(new ListDataModel(questao.getQuestao().getOpcoes()));
+    }
+
+    public DataModel getModelOpcao()
+    {
+        return modelOpcao;
+    }
+
+    public void setModelOpcao(DataModel modelOpcao)
+    {
+        this.modelOpcao = modelOpcao;
+    }
+
+    public Questao getQuestao()
+    {
+        return questao;
+    }
+
+    public void setQuestao(Questao questao)
+    {
+        this.questao = questao;
+    }
+
+    public Map getOpcoesCriadas()
+    {
+        return opcoesCriadas;
+    }
+
+    public void setOpcoesCriadas(Map opcoesCriadas)
+    {
+        this.opcoesCriadas = opcoesCriadas;
+    }
+
+
+}
