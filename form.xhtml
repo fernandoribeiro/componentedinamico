@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+   <h:head>
+       <title>Formulário</title>
+   </h:head>
+
+   <h:body>
+      <h:form id="form">
+          <h:messages />
+          <h:dataTable value="#{questionario.dataModelQuestoes}" var="questao" id="tabela">
+              <h:column>
+                <!--            Painel de Edição           -->  
+                <h:panelGrid columns="3" rendered="#{questao.editavel}">  
+                    <h:panelGroup>                  
+                        Pergunta da Questao:  <h:inputText value="#{questao.pergunta}" size="50"/>
+                        <br/>
+                        Texto de Ajuda: <h:inputText value="#{questao.textoDeAjuda}" size="50"/>
+                        <br/>
+                        <br/>
+                        <h:selectOneMenu value="#{questao.tipoDeQuestao}" onchange="submit()" 
+                                         valueChangeListener="#{questionario.escolhaTipoDeQuestao}">
+                          <f:selectItem itemLabel="Escolha o Tipo de Questão" noSelectionOption="true"/>
+                          <f:selectItems value="#{questionario.opcoes}"/>
+                        </h:selectOneMenu>
+                        <br/>
+                        
+                        <!-- Questão de Texto -->
+                        <h:inputTextarea rows="2" cols="40" rendered="#{questao.tipoDeQuestao eq 1}" disabled="true"/>
+                        
+                        <!-- Questão de Múltipla escolha -->
+                        <h:panelGroup  rendered="#{questao.tipoDeQuestao eq 2}">
+                            <h:dataTable value="#{questao.modelOpcao}" var="opcao">
+                                <h:column>
+                                    <h:panelGrid columns="3">
+                                        <input type="checkbox" disabled="disabled" />
+                                        <h:inputText value="#{opcao.campo}" />
+                                        <h:commandLink actionListener="#{questionario.removerOpcao}" value="Remover Opção"/>
+                                    </h:panelGrid>
+                                </h:column>
+                            </h:dataTable>
+                            <h:commandLink actionListener="#{questionario.adicionarOpcao}" value="Adicionar Opção" />
+                        </h:panelGroup>
+                        
+                        <!-- Questão de Única escolha -->
+                        <h:panelGroup  rendered="#{questao.tipoDeQuestao eq 3}">
+                            <h:dataTable value="#{questao.modelOpcao}" var="opcao">
+                                <h:column>
+                                    <h:panelGrid columns="3">
+                                        <input type="radio" disabled="disabled" />
+                                        <h:inputText value="#{opcao.campo}" />
+                                        <h:commandLink actionListener="#{questionario.removerOpcao}" value="Remover Opção"/>
+                                    </h:panelGrid>
+                                </h:column>
+                            </h:dataTable>
+                            <h:commandLink actionListener="#{questionario.adicionarOpcao}" value="Adicionar Opção" />
+                        </h:panelGroup>      
+
+                      
+                    </h:panelGroup>
+                    
+                    <h:commandLink actionListener="#{questionario.salvarQuestao}" value="Salvar" />
+                    <h:commandLink value="Excluir" />
+                </h:panelGrid>   
+                
+                  <!--             Painel de Questões Prontas            -->  
+                  <h:panelGrid cellspacing="10" cellpadding="2" columns="3" rendered="#{questao.editavel}">  
+                    <h:panelGroup>
+                        <h:outputText value="#{questao.pergunta}" />
+                        <br/>
+                        <h:outputText value="#{questao.textoDeAjuda}" />
+                        <br/>
+                        
+                        <!-- Questão de Texto -->
+                        <h:inputTextarea cols="40" rows="2" rendered="#{questao.tipoDeQuestao eq 1}" />
+                        
+                        <!-- Questão de Múltipla escolha -->
+                        <h:selectManyCheckbox value="#{questionario.respostas}"
+                                              rendered="#{questao.tipoDeQuestao eq 2}" layout="pageDirection">
+                            <f:selectItems value="#{questao.opcoesCriadas}" />
+                        </h:selectManyCheckbox>
+                                              
+                        
+                        <!-- Questão de Única escolha -->
+                        <h:selectOneRadio value="#{questionario.resposta}" 
+                                          rendered="#{questao.tipoDeQuestao eq 3}" layout="pageDirection">
+                            <f:selectItems value="#{questao.opcoes}" var="opcao" 
+                                           itemValue="#{opcao.campo}" itemLabel="#{opcao.campo}" />
+                        </h:selectOneRadio> 
+                    </h:panelGroup>
+                      <h:commandLink actionListener="#{questionario.editarQuestao}" value="Editar" />
+                    <h:commandLink value="Excluir" />
+                </h:panelGrid>
+              </h:column>
+          </h:dataTable>
+          <h:commandLink actionListener="#{questionario.adicionarQuestao}" value="Adicionar Questão" />
+      </h:form>
+   </h:body>
+</html>
